@@ -1,147 +1,33 @@
-list_Math = [
-    //Inputs
-    {
-        name: 'INPUT_INT',
-        id: 0,
-        input: [],
-        output: ['int'],
-    },
-    {
-        name: 'INPUT_STR',
-        id: 0,
-        input: [],
-        output: ['str'],
-    },
-    {
-        name: 'INPUT_BOOL',
-        id: 0,
-        input: [],
-        output: ['bool'],
-    },
-
-    //Outputs
-
-    {
-        name: 'OUTPUT_INT',
-        id: 0,
-        input: ['int'],
-        output: [],
-    },
-    {
-        name: 'OUTPUT_STR',
-        id: 0,
-        input: ['str'],
-        output: [],
-    },
-    {
-        name: 'OUTPUT_BOOL',
-        id: 0,
-        input: ['bool'],
-        output: [],
-    },
-
-
-    //Math operations
-    {
-        name: 'SUM',
-        id: 0,
-        input: ['int', 'int'],
-        output: ['int'],
-        funct: function(a){
-            return a[0]+a[1];
-        }
-    },
-    {
-        name: 'SUB',
-        id: 0,
-        input: ['int', 'int'],
-        output: ['int'],
-        funct: function(a){
-            return a[0]-a[1];
-        }
-    },
-    {
-        name: 'MULT',
-        id: 0,
-        input: ['int', 'int'],
-        output: ['int'],
-        funct: function(a) {
-            return a[0] * a[1];
-        }
-    },
-    {
-        name: 'DIV',
-        id: 0,
-        input: ['int', 'int'],
-        output: ['int'],
-        funct: function(a) {
-            return Math.floor( a[0] / a[1] );
-        }
-    },
-
-
-    //String operations
-    {
-        name: 'REPL',
-        id: 0,
-        input: ['str', 'str', 'str'],
-        output: ['str'],
-        funct: function(a) {
-            return a[0].replace(a[1], a[2]);
-        }
-    },
-    {
-        name: 'IsSubSTR',
-        id: 0,
-        input: ['str', 'str'],
-        output: ['bool'],
-        funct: function(a) {
-            return a[0].includes(a[1]);
-        }
-    },
-    {
-        name: 'CONC',
-        id: 0,
-        input: ['str', 'str'],
-        output: ['str'],
-        funct: function(a) {
-            return String(a[0])+String(a[1]);
-        }
-    },
-];
-
-
 $('document').ready(function () {
 
-    for (i of [list_Math[0], list_Math[1], list_Math[2]]) {
-        $('#inp').append('<li class="col-md-12" id="' + i.name + '">' + i.name + '</li>');
+    for(let comp of list_Math){
+
+    $('#' + comp.type).append('<li class="col-md-12" id="' + comp.name + '">' + comp.name + '</li>');
+
     }
-
-    for (i of [list_Math[3], list_Math[4], list_Math[5]]) {
-        $('#outp').append('<li class="col-md-12" id="' + i.name + '">' + i.name + '</li>');
-    }
-
-    for (i of [list_Math[6], list_Math[7], list_Math[8], list_Math[9]]) {
-        $('#math').append('<li class="col-md-12" id="' + i.name + '">' + i.name + '</li>');
-    }
-
-    for (i of [list_Math[10], list_Math[11], list_Math[12]]) {
-        $('#strOp').append('<li class="col-md-12" id="' + i.name + '">' + i.name + '</li>');
-    }
-
-
 
     $("#menu ul").hide();
 
     $("#menu li p").click(function () {
 
-        if ($(this).hasClass("chosen") == false){
+        if ($(this).hasClass("chosen") == false) {
             $(this).addClass("chosen");
         }
         else {
             $(this).removeClass("chosen");
         }
-        $("#"+ ($(this.parentNode).children())[1].id).slideToggle("slow");
+        $("#" + ($(this.parentNode).children())[1].id).slideToggle("slow");
+    });
+
+
+    $("#dialog-1").dialog({
+        modal: true,
+        autoOpen: false,
+    });
+
+    $("#dialog-3").dialog({
+        modal: true,
+        autoOpen: false,
     });
 
 
@@ -158,14 +44,11 @@ jsPlumb.ready(function () {
             appendTo: '.container'
         });
 
-
         $('#' + i.name).addClass('clone col-md-12');
-
 
     }
 
-
-    $('#diagramContainer').droppable({
+    $('#diagramContainer').droppable({//создание элемента
         drop: function (event, ui) {
 
             var identity = ui.draggable.context.id;
@@ -175,30 +58,28 @@ jsPlumb.ready(function () {
             //Правильная позиция
             var d = $("#diagramContainer").offset();
 
-            var component = '<div class="cont" id="' + result[0].name + result[0].id + '"' +
+            var component = '<div class="cont" id="' + result[0].name + "id" + result[0].id + '"' +
                 'style=" width: 180px; height: ' + 40 * Math.max((result[0].input.length + 1), (result[0].output.length + 1)) + 'px;   ' +
                 ' left:' + (ui.absolutePosition.left - d.left) + '; top: ' + (ui.absolutePosition.top - d.top) + ';  "' +
-                ' >' + result[0].name;
+                ' >' + result[0].name + '<span class ="number" >' + result[0].id + '</span>';
 
             for (i = 1; i <= result[0].input.length; i++) {
-                var input_id = result[0].name + String(result[0].id) + ".input" + i;
-                console.log(input_id);
+                var input_id = result[0].name + "id" + String(result[0].id) + ".input" + i;
                 component = component + '<div id="' + input_id + '" class="item ' + result[0].input[i - 1] + '" style="top:' + i * 40 + 'px;">' + result[0].input[i - 1] + '</div>';
 
             }
 
             for (i = 1; i <= result[0].output.length; i++) {
-                var output_id = result[0].name + String(result[0].id) + ".output" + i;
-                console.log(output_id);
+                var output_id = result[0].name + "id" + String(result[0].id) + ".output" + i;
                 component = component + '<div id="' + output_id + '" class="item ' + result[0].output[i - 1] + '" style="top:' + i * 40 + 'px;left: 100px; ">' + result[0].output[i - 1] + '</div>';
 
             }
 
-            component = component + '<button class="delete" id =' + result[0].name + result[0].id + 'd' + '></button></div>'
+            component = component + '<button class="delete" id =' + result[0].name + "id" + result[0].id + 'd' + '></button></div>'
             $('#diagramContainer').append(component);
 
             for (i = 1; i <= result[0].input.length; i++) {
-                var input_id = result[0].name + String(result[0].id) + ".input" + i;
+                var input_id = result[0].name + "id" + String(result[0].id) + ".input" + i;
                 var endpointOptions = {
                     isTarget: true,
                     endpoint: "Rectangle",
@@ -209,7 +90,7 @@ jsPlumb.ready(function () {
             }
 
             for (i = 1; i <= result[0].output.length; i++) {
-                var output_id = result[0].name + String(result[0].id) + ".output" + i;
+                var output_id = result[0].name + "id" + String(result[0].id) + ".output" + i;
                 var endpointOptions = {
                     isSource: true,
                     Connector: ["Straight"],
@@ -219,13 +100,14 @@ jsPlumb.ready(function () {
                 var endpoint = jsPlumb.addEndpoint(String(output_id), endpointOptions);
 
             }
-            jsPlumb.draggable(result[0].name + String(result[0].id));
+            jsPlumb.draggable(result[0].name + "id" + String(result[0].id));
 
             result[0].id = result[0].id + 1;
 
-
         },
     });
+
+    var color_red = [];//для отслеживания красных соединений
 
     //изменение цвета после соединения
     jsPlumb.bind("connection", function (ui) {
@@ -236,6 +118,7 @@ jsPlumb.ready(function () {
 
         if (sId != tId) {
             color = "#ed0034";
+            color_red.push({source: ui.sourceId, target: ui.targetId});
         }
         else {
             switch (tId) {
@@ -251,22 +134,30 @@ jsPlumb.ready(function () {
             }
         }
 
+
         jsPlumb.registerConnectionType("example", {
             paintStyle: {stroke: color, strokeWidth: 1},
-            //    hoverPaintStyle:{ stroke:"red", strokeWidth:1 }
         });
 
         ui.connection.setType("example");
+
+
     });
+
+    //проверяю, убирается ли красное соединение
+    jsPlumb.bind("connectionDetached", function (ui) {
+        color_red = color_red.filter(word => (word.source != ui.sourceId) || (word.target != ui.targetId));
+    })
 
     //удаление элемнета
     $(".delete").live('click', function () {
         // alert('you clicked me!');
+
         var id_for_deletion = this.id.substr(0, this.id.length - 1);
 
-
         //подумать про правильный id если >10  - работать не будет
-        var identity = id_for_deletion.substr(0, id_for_deletion.length - 1);
+        var identity = id_for_deletion.substr(0, id_for_deletion.lastIndexOf("id"));
+
         var result = list_Math.filter(word => word.name == identity);
 
         for (i = 1; i <= result[0].input.length; i++) {
@@ -282,5 +173,321 @@ jsPlumb.ready(function () {
         $('#' + id_for_deletion).remove();
 
     });
+
+    //Topological Sort
+    $(".start").click(
+        function () {
+
+            if (color_red.length > 0) {
+
+                $('#dialog-1').dialog("open");
+            }
+            else {
+                var conn = jsPlumb.getAllConnections();
+
+                var connector = [];
+                var elements = [];
+
+                function parse(element) {
+                    if (element.includes(".input")) {
+                        element = element.substr(0, element.indexOf(".input"));
+                    }
+                    if (element.includes(".output")) {
+                        element = element.substr(0, element.indexOf(".output"));
+                    }
+                    return element;
+                }
+
+                for (i = 0; i < conn.length; i++) {
+                    connector.push({
+                        targetId: parse(conn[i].targetId),
+                        sourceId: parse(conn[i].sourceId)
+                    });
+                    if (elements.includes(parse(conn[i].targetId)) == false) {
+                        elements.push(parse(conn[i].targetId))
+                    }
+                    ;
+                    if (elements.includes(parse(conn[i].sourceId)) == false) {
+                        elements.push(parse(conn[i].sourceId));
+                    }
+                }
+                ;
+
+                var number = elements.length + 1;
+                while (elements.length != number) {
+                    number = elements.length;
+                    for (let element of elements) {
+                        var no_parent = true;
+                        //ищем элемент из connector без родителей -  correct
+                        for (z = 0; z < connector.length; z++) {
+                            if (connector[z].targetId == element) {
+                                no_parent = false;
+                            }
+                        }
+                        //создаем новый массив без элемента-
+                        if (no_parent == true) {
+                            connector = connector.filter(c => c.sourceId != element);
+                            elements = elements.filter(c => c != element);
+                        }
+                    }
+                }
+                if (elements.length != 0) {
+                  //  alert("Delete cycles!!!!");//добавить всплывающее окно!!!!
+                    $("<div title='ERROR!'>Delete cycles</div>").dialog({
+                        modal: true,
+                    })
+                }
+                else {
+
+                    //Data  driven engine
+                    var new_connectors = [];
+                    var new_elements = [];//инпуты и оутпуты
+                    elements = [];//блоки
+
+                    for (i = 0; i < conn.length; i++) {
+                        new_connectors.push({
+                            targetId: conn[i].targetId,
+                            sourceId: conn[i].sourceId
+                        });
+
+                        var contain = false;
+
+                        for (let element of elements) {
+                            if (element.id == parse(conn[i].targetId)) {
+                                contain = true;
+                            }
+                        }
+                        ;
+                        if (contain == false) {
+                            var ind = 0;
+
+
+                            //надо, чтобы
+                            for (k = 0; k < list_Math.length; k++) {
+                                if (((parse(conn[i].targetId)).substr(0, (parse(conn[i].targetId)).lastIndexOf("id"))) == (list_Math[k].name)) {
+                                    ind = k;
+                                }
+                            }
+                            elements.push({id: parse(conn[i].targetId), index: ind})
+                        }
+                        ;
+
+
+                        var contain = false;
+
+                        for (let element of elements) {
+                            if (element.id == parse(conn[i].sourceId)) {
+                                contain = true;
+                            }
+                        }
+                        ;
+                        if (contain == false) {
+
+                            var ind = 0;
+
+                            for (k = 0; k < list_Math.length; k++) {
+                                /*  if ((parse(conn[i].sourceId)).includes(list_Math[k].name)) {
+                                      ind = k;
+                                  }*/
+                                if (((parse(conn[i].sourceId)).substr(0, (parse(conn[i].sourceId)).lastIndexOf("id"))) == (list_Math[k].name)) {
+                                    ind = k;
+                                }
+
+                            }
+
+                            elements.push({id: parse(conn[i].sourceId), index: ind})
+                        }
+                        ;
+
+
+                        contain = false;
+                        for (let new_element of new_elements) {
+                            if (new_element.id == conn[i].targetId) {
+                                contain = true;
+                            }
+                        }
+                        ;
+
+                        if (contain == false) {
+                            new_elements.push({id: conn[i].targetId, val: null})
+                        }
+                        ;
+
+
+                        contain = false;
+                        for (let new_element of new_elements) {
+                            if (new_element.id == conn[i].sourceId) {
+                                contain = true;
+                            }
+                        }
+                        ;
+
+                        if (contain == false) {
+                            new_elements.push({id: conn[i].sourceId, val: null});
+                        }
+                        ;
+
+                    }
+                    ;
+
+                    for (let new_element of new_elements) {
+
+                        if ((String(new_element.id)).includes("INPUT_INT")) {
+
+                            new_element.val = +prompt("Введите число " + new_element.id.substr(0, new_element.id.lastIndexOf(".output")), 10);//потом считать строку
+                            //добавить считывание строки и boolean
+                            for (let new_connector of new_connectors) {//ищу, где вводимое значение является сорсом
+
+                                if (new_connector.sourceId == new_element.id) {//является сорсом
+
+                                    for (let new_el of new_elements) {
+                                        if (new_connector.targetId == new_el.id) {
+                                            new_el.val = new_element.val;
+                                        }
+                                    }
+                                }
+                            }
+                            new_elements = new_elements.filter(c => c.id != new_element.id);
+                        };
+                        if ((String(new_element.id)).includes("INPUT_STR")) {
+
+                            new_element.val = prompt("Введите число " + new_element.id.substr(0, new_element.id.lastIndexOf(".output")), 10);//потом считать строку
+                            //добавить считывание строки и boolean
+                            for (let new_connector of new_connectors) {//ищу, где вводимое значение является сорсом
+
+                                if (new_connector.sourceId == new_element.id) {//является сорсом
+
+                                    for (let new_el of new_elements) {
+                                        if (new_connector.targetId == new_el.id) {
+                                            new_el.val = new_element.val;
+                                        }
+                                    }
+                                }
+                            }
+                            new_elements = new_elements.filter(c => c.id != new_element.id);
+                        }
+
+                        if ((String(new_element.id)).includes("INPUT_BOOL")) {
+
+                            new_element.val = prompt("Введите " + true + " or " + false  + " " + new_element.id.substr(0, new_element.id.lastIndexOf(".output")), true);//потом считать строку
+
+                            if (new_element.val == "true"){
+                            new_element.val = true;
+                            }
+                            else if( new_element.val == "false"){
+                            new_element.val = false;
+                            }
+                            else {
+                             $("<div title='ERROR!'>Not Boolean</div>").dialog({
+                                modal: true,
+                               })
+                            }
+
+                            //добавить считывание строки и boolean
+                            for (let new_connector of new_connectors) {//ищу, где вводимое значение является сорсом
+
+                                if (new_connector.sourceId == new_element.id) {//является сорсом
+
+                                    for (let new_el of new_elements) {
+                                        if (new_connector.targetId == new_el.id) {
+                                            new_el.val = new_element.val;
+                                        }
+                                    }
+                                }
+                            }
+                            new_elements = new_elements.filter(c => c.id != new_element.id);
+                        }
+                    }
+                    ;
+
+
+                    //recursion
+                    var len = new_elements.length + 1;
+                    while ((len != 0) && (len != new_elements.length)) {
+                        len = new_elements.length;
+                        for (let element of elements) {
+
+                            if (((new_elements.filter(word => (((word.id).includes(element.id)) && (word.val != null)))).length) == (list_Math[element.index].input.length) && (list_Math[element.index].input.length > 0)) {
+                                var input = (new_elements.filter(word => (((word.id).includes(element.id)) && (word.val != null))));
+
+
+                                var result = 0;
+                                if ((input[0].id).includes("OUTPUT")) {
+
+                                // сделать для нескольких аутпутов
+                                    result = input[0].val;
+                                  /* $("<div class='result' title='RESULT!'>" + result +"</div>").dialog({
+                                     modal: true,
+                                   })*/
+                                 alert(result);//добавить всплывающее окно
+
+                                }
+                                else {
+
+                                var number = [];
+
+                                for (let inp_element of input){
+                                var inp_ind = +inp_element.id.substr( (String(inp_element)).lastIndexOf(".input"), inp_element.length)
+                                number[inp_ind - 1] = inp_element.val;
+                                }
+
+                                    result = list_Math[element.index].funct(number);
+
+                                }
+
+                                //записсываю в аутпут
+                                //передаю по коннекшенам
+
+                                for (i = 1; i <= list_Math[element.index].output.length; i++) {
+                                    var output_id = element.id + ".output" + i;
+
+                                    for (let new_connector of new_connectors) {//ищу, где вводимое значение является сорсом
+
+                                        if (new_connector.sourceId == output_id) {//является сорсом, всем таргетам надо поставить значение
+
+                                            for (let new_el of new_elements) {
+                                                if (new_connector.targetId == new_el.id) {
+                                                    new_el.val = result;
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                    new_elements = new_elements.filter(word => word.id != output_id);
+                                }
+                                ;
+
+
+                                var new_array = [];
+
+                                for (let el of new_elements) {
+                                    var for_deletion = false;
+                                    for (let inp of input) {
+                                        if (inp.id == el.id) {
+                                            for_deletion = true;
+                                        }
+                                    }
+                                    if (for_deletion == false) {
+                                        new_array.push(el);
+                                    }
+                                }
+                                new_elements = new_array;
+                            }
+                        }
+
+                    }
+
+
+                    if (((len != 0) && (len == new_elements.length))) {
+                        //alert("Не все значения введены");
+                        $('#dialog-3').dialog("open");
+                    }
+                }
+                ;
+
+            }
+        }
+    );//Finish of topoligical sort
+
 
 });

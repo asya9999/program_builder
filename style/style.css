@@ -9,6 +9,18 @@ body {
 }
 
 
+#dialog-1 .ui-widget-header{
+    background-color: #f2dfdf;
+}
+
+
+.number{
+    font-family:'Mochary' ;
+    font-size: 10px;
+}
+
+
+
 @font-face {
     font-family: 'Antipasto'; /* Имя шрифта */
     src: url('font/AntipastoPro-Thin_trial.ttf'); /* Путь к файлу со шрифтом */
@@ -81,6 +93,7 @@ body {
     margin: 0;
     padding: 0;
 }
+
 
 #diagramContainer {
     background-color: #d3d2da;
@@ -208,13 +221,17 @@ ul#menu li ul li:hover {
     width: 100%;
     overflow-y: scroll;
 }
+input{
 
-
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 .chosen {
     background: #545454;
 }
 
-
+.result{
+    font-family: "Courier New";
+}
 
 .clone {
     color: white;
