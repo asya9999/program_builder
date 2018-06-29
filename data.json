@@ -1,8 +1,0 @@
-{
-  "nodes": [
-    { "id":"1", "name":"foo"  }
-  ],
-  "edges":[
-    { "source":"1", "target":"2" }
-  ]
-}
